@@ -1,4 +1,3 @@
-// src/providers/AuthProvider.jsx
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase.init"; // Firebase config
@@ -10,12 +9,12 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Monitor Firebase auth state
+    // Firebase auth state listener (Firebase itself persists user across sessions)
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
-    return () => unsubscribe(); // Clean up on unmount
+    return () => unsubscribe(); // Cleanup when the component is unmounted
   }, []);
 
   const createUser = (email, password) => {
@@ -30,7 +29,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     signOut(auth);
-    setUser(null); // Clear user on logout
+    setUser(null); // Set user to null after logout
   };
 
   const userInfo = {

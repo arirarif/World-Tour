@@ -5,17 +5,19 @@ import { AuthContext } from '../providers/AuthProvider'; // Import AuthContext f
 const Header = () => {
     const { user, logout } = useContext(AuthContext); // Get user state from context
 
-    const links = <>
-        <li><NavLink to="/">Home</NavLink></li>
-        <li><NavLink to="/addCoffee">Add Coffee</NavLink></li>
-        <li><NavLink to="/addVisa">Add Visa</NavLink></li>
-        <li><NavLink to="/signin">Signin</NavLink></li>
-        <li><NavLink to="/signup">SignUp</NavLink></li>
-        <li><NavLink to="/users">Users</NavLink></li>
-        {user && (
-            <li><NavLink to="/private">Private Link</NavLink></li> // Show private link if user is logged in
-        )}
-    </>;
+    const links = (
+        <>
+            <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/allvisas">All Visas</NavLink></li>
+            {user && (
+                <>
+                    <li><NavLink to="/addVisa">Add Visa</NavLink></li>
+                    <li><NavLink to="/myVisas">My Added Visas</NavLink></li>
+                    <li><NavLink to="/myVisaApplications">My Visa Applications</NavLink></li>
+                </>
+            )}
+        </>
+    );
 
     return (
         <div className="navbar bg-base-100">
@@ -41,7 +43,7 @@ const Header = () => {
                         {links}
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">daisyUI</a>
+                <a className="btn btn-ghost text-xl">WorldTour</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -50,9 +52,25 @@ const Header = () => {
             </div>
             <div className="navbar-end">
                 {user ? (
-                    <button onClick={logout} className="btn btn-primary">Logout</button> // Show logout button if user is logged in
+                    <div className="flex items-center space-x-4">
+                        <div className="relative">
+                            <img
+                                src={user.photoURL || '/default-avatar.jpg'} // Fallback to default avatar if no photoURL
+                                alt="User Avatar"
+                                className="h-8 w-8 rounded-full cursor-pointer"
+                                title={user.displayName || 'User'} // Show displayName on hover
+                            />
+                            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg p-2 hidden group-hover:block">
+                                <p>{user.displayName || 'User'}</p>
+                            </div>
+                        </div>
+                        <button onClick={logout} className="btn btn-primary">Logout</button>
+                    </div>
                 ) : (
-                    <NavLink to="/signin" className="btn btn-primary">Login</NavLink> // Show login button if not logged in
+                    <>
+                        <NavLink to="/signin" className="btn btn-primary">Login</NavLink>
+                        <NavLink to="/signup" className="btn btn-primary">Register</NavLink>
+                    </>
                 )}
             </div>
         </div>

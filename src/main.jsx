@@ -5,15 +5,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthProvider from "./providers/AuthProvider"; // Import the AuthProvider
 import Layout from "./components/Layout";
 import Home from "./components/Home";
-import AddCoffee from "./components/AddCoffee";
-import AddVisa from "./components/AddVisa"; // AddVisa route
-import UpdateCoffee from "./components/UpdateCoffee";
+import AddVisa from "./components/AddVisa"; // AddVis
+import UpdateVisa from "./components/UpdateVisa"; // Import UpdateVisa
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Users from "./components/Users";
-import PrivatePage from "./components/PrivatePage";
 import PrivateRoute from "./components/PrivateRoute";
 import CountryView from "./components/CountryView";
+import AllVisas from './components/AllVisas';  // Import AllVisas component
+import VisaDetails from './components/VisaDetails';  // Import VisaDetails component
 
 const router = createBrowserRouter([
   {
@@ -26,17 +26,22 @@ const router = createBrowserRouter([
         loader: () => fetch("http://localhost:5000/coffee"),
       },
       {
-        path: "addCoffee",
-        element: <AddCoffee />,
-      },
-      {
         path: "addVisa",
-        element: <AddVisa />,
+        element: (
+          <PrivateRoute>
+            <AddVisa />
+          </PrivateRoute>
+        ), // Protect Add Visa content
       },
       {
-        path: "updateCoffee/:id",
-        element: <UpdateCoffee />,
-        loader: ({ params }) => fetch(`http://localhost:5000/coffee/${params.id}`),
+        path: "updateVisa/:id", // New UpdateVisa route
+        element: (
+          <PrivateRoute>
+            <UpdateVisa />
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/visa/${params.id}`), // Fetch visa data by ID
       },
       {
         path: "signin",
@@ -52,20 +57,21 @@ const router = createBrowserRouter([
         loader: () => fetch("http://localhost:5000/users"),
       },
       {
-        path: "private",
-        element: (
-          <PrivateRoute>
-            <PrivatePage />
-          </PrivateRoute>
-        ),
-      },
-      {
         path: "viewVisa/:id", // Protect this route with PrivateRoute
         element: (
           <PrivateRoute>
             <CountryView />
           </PrivateRoute>
         ),
+      },
+      // New Routes for AllVisas and VisaDetails
+      {
+        path: "allVisas", // All Visas route
+        element: <AllVisas />,
+      },
+      {
+        path: "visa/:id", // Visa Details route with dynamic ID
+        element: <VisaDetails />,
       },
     ],
   },

@@ -93,7 +93,7 @@ const SignIn = () => {
               <button className="btn btn-primary">Sign In</button>
             </div>
             <p>
-              New to coffee drinker: <Link to={"/signup"}>Sign Up</Link>
+              New to Visit Country: <Link to={"/signup"}>Sign Up</Link>
             </p>
           </form>
         </div>
